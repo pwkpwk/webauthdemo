@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webauthdemo.service", "weba
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "webauthdemo.fscontrollers", "webauthdemo.fscontrollers\webauthdemo.fscontrollers.fsproj", "{565B8CBE-EAD2-41C1-96CD-5DFC1602087E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webauthdemo.unggoy", "webauthdemo.unggoy\webauthdemo.unggoy.csproj", "{7586260A-A075-47D2-A43F-D7C0402D9904}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{565B8CBE-EAD2-41C1-96CD-5DFC1602087E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{565B8CBE-EAD2-41C1-96CD-5DFC1602087E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{565B8CBE-EAD2-41C1-96CD-5DFC1602087E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7586260A-A075-47D2-A43F-D7C0402D9904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7586260A-A075-47D2-A43F-D7C0402D9904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7586260A-A075-47D2-A43F-D7C0402D9904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7586260A-A075-47D2-A43F-D7C0402D9904}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

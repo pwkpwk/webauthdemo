@@ -1,0 +1,8 @@
+# @name Unauthorized GetRandomNumberAsync
+GET http://localhost:5042/api/GetRandomNumberAsync
+###
+
+# @name Authorized GetRandomNumberAsync
+GET http://localhost:5042/api/GetRandomNumberAsync
+Authorization: unggoy unggoy-token
+###
