@@ -1,0 +1,6 @@
+bin/
+obj/
+*.[Dd]ot[Ss]ettings.user
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
