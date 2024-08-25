@@ -7,6 +7,18 @@ namespace webauthdemo.unggoy;
 /// <summary>
 /// Handler that verifies the requiremets of the 'Unggoy' authorization policy
 /// </summary>
+/// <remarks>
+/// The handler verifies 2 policy requirements for illustration purposes only.
+/// <para>
+/// In practice, both requirements must be merged into one, for that the handler shall extract the token from
+/// the request headers and the action name from the metadata attribute, and verify if the token allows the action.
+/// </para>
+/// <para>
+/// Instead of implementing the <see cref="IAuthorizationHandler"/> interface, the handler may inherit
+/// <see cref="AuthorizationHandler{TRequirement}"/> that loops through all requirements, finds the one that matches
+/// its generic argument, and calls a virtual method to verify that requirement only.
+/// </para>
+/// </remarks>
 internal sealed class UnggoyAuthorizationHandler(
     ILogger<UnggoyAuthorizationHandler> logger,
     IUnggoyActionVerifier actionVerifier)
@@ -22,10 +34,10 @@ internal sealed class UnggoyAuthorizationHandler(
         {
             return;
         }
-        
+
         var httpContext = context.Resource as HttpContext;
-        
-        if (httpContext is null) 
+
+        if (httpContext is null)
         {
             logger.LogError(FailureEventId, "HTTP context is not available");
             context.Fail();
@@ -33,72 +45,69 @@ internal sealed class UnggoyAuthorizationHandler(
         }
 
         var endpoint = httpContext.GetEndpoint();
-        
-        if (endpoint is null) 
+
+        if (endpoint is null)
         {
             logger.LogError(FailureEventId, "HTTP endpoint is not available");
             context.Fail();
             return;
         }
 
-        bool isTokenRequired = false;
         string? actionName = null;
         string? token = null;
-        
+
         foreach (var requirement in context.PendingRequirements)
         {
-            if (requirement is UnggoyTokenRequired tokenRequired) 
+            if (requirement is UnggoyTokenRequired tokenRequired)
             {
-                if (tokenRequired.IsRequired) 
+                token = tokenRequired.ExtractToken(httpContext);
+
+                if (token is null)
                 {
-                    isTokenRequired = true;
-                    token = tokenRequired.ExtractToken(httpContext);
-                }
-                
-                if (isTokenRequired && token is null) 
-                {
-                    logger.LogError(FailureEventId, "Token is not available");
-                    context.Fail(new AuthorizationFailureReason(this, "Token is not available"));
+                    logger.LogError(FailureEventId, "Required Unggoy token is missing");
+                    context.Fail(new AuthorizationFailureReason(this, "Required Unggoy token is missing"));
                     break;
                 }
+
                 context.Succeed(requirement);
             }
             else if (requirement is UnggoyActionNameRequired actionNameRequired)
             {
                 actionName = actionNameRequired.ExtractActionName(endpoint);
-                
-                if (actionName is null) 
+
+                if (actionName is null)
                 {
                     logger.LogError(FailureEventId, "Action name is not available");
                     context.Fail(new AuthorizationFailureReason(this, "Action name is not available"));
                     break;
                 }
+
                 context.Succeed(requirement);
             }
         }
-        
-        if (!context.HasFailed && isTokenRequired) 
+
+        if (!context.HasFailed)
         {
             var valid = await VerifyTokenAsync(actionName, token, httpContext.RequestAborted);
-            
-            if (!valid) 
+
+            if (!valid)
             {
                 logger.LogError(FailureEventId, "Token validation has failed");
                 context.Fail(new AuthorizationFailureReason(this, "Token validation has failed"));
             }
         }
     }
-    
-    private async Task<bool> VerifyTokenAsync(string? actionName, string? token, CancellationToken cancellation) 
+
+    private async Task<bool> VerifyTokenAsync(string? actionName, string? token, CancellationToken cancellation)
     {
         logger.LogInformation(VerifyiingEventId, "Verifying token '{Token}' for '{Action}'", token, actionName);
-        
-        if (actionName is null || token is null) 
+
+        if (actionName is null || token is null)
         {
             logger.LogError(BadArgsEventId, "Action name or Unggoy token is missing");
             return false;
         }
-        
+
         return await actionVerifier.VerifyTokenAsync(actionName, token, cancellation);
     }
 }

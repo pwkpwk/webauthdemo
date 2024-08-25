@@ -5,6 +5,7 @@
 /// </summary>
 /// <param name="name">Name of the action used by the authorization handler (<see cref="UnggoyAuthorizationHandler"/>)
 /// to authorize the received call.</param>
+[Serializable, AttributeUsage(AttributeTargets.Method)]
 public class UnggoyActionAttribute(string name) : Attribute
 {
     public string Name { get; set; } = name;

@@ -13,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddGrpcSwagger();
 
+// Enable injection of IHttpContextAccessor into components of the ASP.NET HTTP pipeline.
+builder.Services.AddHttpContextAccessor();
 // Add 'Unggoy' authorization policy
 builder.Services.AddUnggoyAuthorization();
 // Also register the required Unggoy action verifier used by the authorization handler

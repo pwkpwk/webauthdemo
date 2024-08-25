@@ -4,8 +4,19 @@ using Microsoft.Toolkit.HighPerformance;
 
 namespace webauthdemo.unggoy;
 
-internal sealed record UnggoyTokenRequired(bool IsRequired) : IAuthorizationRequirement
+/// <summary>
+/// 'Unggoy' authorization policy requirement of the presence of Authorization HTTP header with 'unggoy' scheme
+/// and a non-empty token.
+/// </summary>
+internal sealed record UnggoyTokenRequired : IAuthorizationRequirement
 {
+    /// <summary>
+    /// <see cref="UnggoyAuthorizationHandler"/> calls this method to extract Unggoy token from the Authorization
+    /// HTTP header.
+    /// </summary>
+    /// <param name="context">ASP.NET HTTP context.</param>
+    /// <returns>Unggoy token string from the first Authorization header with 'unggoy' scheme, or null if none
+    /// of the Authorization headers has a token.</returns>
     public string? ExtractToken(HttpContext context)
     {
         foreach (var header in context.Request.Headers.Authorization)
@@ -34,15 +45,16 @@ internal sealed record UnggoyTokenRequired(bool IsRequired) : IAuthorizationRequ
             switch (index)
             {
                 case 0:
-                    index = token is "unggoy" ? 1 : 2;
-                    break;
+                    if (token is "unggoy" or "Unggoy")
+                    {
+                        index = 1;
+                        break;
+                    }
+
+                    return null;
 
                 case 1:
                     return token.ToString();
-                    break;
-
-                default:
-                    continue;
             }
         }
 
