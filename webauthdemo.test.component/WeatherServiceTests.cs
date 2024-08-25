@@ -12,7 +12,7 @@ public class WeatherServiceTests
     private WeatherService.WeatherServiceClient _unauthorizedClient;
 
     [SetUp]
-    public void Setup()
+    public void SetUpTest()
     {
         string? baseUri = TestContext.Parameters["httpsUri"]; 
         CallCredentials validCredentials = CallCredentials.FromInterceptor(async (_, metadata) =>
@@ -40,7 +40,7 @@ public class WeatherServiceTests
     }
 
     [TearDown]
-    public void TearDown()
+    public void TearDownTest()
     {
         _authorizedChannel.Dispose();
         _unauthorizedChannel.Dispose();
