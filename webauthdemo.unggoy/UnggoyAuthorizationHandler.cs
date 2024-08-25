@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using webauthdemo.unggoy;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
-namespace webauthdemo.service.Authorization;
+namespace webauthdemo.unggoy;
 
-public class UnggoyAuthorizationHandler(ILogger<UnggoyAuthorizationHandler> logger)
+internal sealed class UnggoyAuthorizationHandler(ILogger<UnggoyAuthorizationHandler> logger)
     : IAuthorizationHandler
 {
     private static readonly EventId FailureEventId = new(1, "Failure");

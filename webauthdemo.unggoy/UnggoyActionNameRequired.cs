@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace webauthdemo.unggoy;
 
-public record UnggoyActionNameRequired : IAuthorizationRequirement 
+internal sealed record UnggoyActionNameRequired : IAuthorizationRequirement 
 {
     public string? ExtractActionName(Endpoint endpoint) 
     {

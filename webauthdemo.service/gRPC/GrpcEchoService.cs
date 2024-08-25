@@ -9,7 +9,7 @@ public class GrpcEchoService(ILogger<GrpcEchoService> logger) : EchoService.Echo
     private static readonly EventId YellEventId = new EventId(1, "Yell");
     private static readonly EventId WhisperEventId = new EventId(2, "Whisper");
     
-    [Authorize("Unggoy"), UnggoyAction("Yell")]
+    [UnggoyAuthorize, UnggoyAction("Yell")]
     public override Task<Utterance> Yell(Utterance request, ServerCallContext context)
     {
         logger.LogInformation(YellEventId, "Heard '{Utterance}'", request.Text);

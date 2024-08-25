@@ -13,8 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddGrpcSwagger();
 
-builder.Services.AddAuthorization(AddAuthorizationOptions);
-builder.Services.AddSingleton<IAuthorizationHandler, UnggoyAuthorizationHandler>();
+// Add 'Unggoy' authorization policy
+builder.Services.AddUnggoyAuthorization();
+
 builder.Services.AddSingleton<IAuthorizationHandler, BackupAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, MainAuthorizationMiddlewareResultHandler>();
 builder.Services.AddGrpc();
@@ -44,13 +45,3 @@ app.MapGrpcService<GrpcEchoService>();
 app.MapControllers();
 
 await app.RunAsync();
-
-void AddAuthorizationOptions(AuthorizationOptions options) 
-{
-    // 'Unggoy' authorization policy has UnggoyActionNameRequired and UnggoyTokenRequired requirements
-    options.AddPolicy(
-        "Unggoy",
-        policy => policy.AddRequirements(
-            new UnggoyActionNameRequired(),
-            new UnggoyTokenRequired(IsRequired: true)));
-}

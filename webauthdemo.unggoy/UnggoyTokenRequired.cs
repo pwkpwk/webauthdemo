@@ -4,7 +4,7 @@ using Microsoft.Toolkit.HighPerformance;
 
 namespace webauthdemo.unggoy;
 
-public record UnggoyTokenRequired(bool IsRequired) : IAuthorizationRequirement
+internal sealed record UnggoyTokenRequired(bool IsRequired) : IAuthorizationRequirement
 {
     public string? ExtractToken(HttpContext context)
     {
