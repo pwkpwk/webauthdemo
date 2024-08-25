@@ -12,6 +12,10 @@ namespace webauthdemo.unggoy;
 /// <param name="logger">Logger to report results.</param>
 /// <param name="actionVerifier">Action verifier component.</param>
 /// <param name="contextAccessor">Accessor of the HTTP context.</param>
+/// <remarks>
+/// The <see cref="AuthorizationHandler{TRequirement}"/> base class is good only for the cases when there is only one
+/// handler for each policy requirement in all policies, as it enumerates all requirements in the authorization context.
+/// </remarks>
 internal class UnggoyCombinedAuthorizationHandler(
     ILogger<UnggoyCombinedAuthorizationHandler> logger,
     IUnggoyActionVerifier actionVerifier,
@@ -45,7 +49,7 @@ internal class UnggoyCombinedAuthorizationHandler(
             return;
         }
 
-        if (!ExtractUnggoyTokenFromRequest(contextAccessor.HttpContext!.Request.Headers, out var token))
+        if (!ExtractUnggoyToken(contextAccessor.HttpContext!.Request.Headers, out var token))
         {
             logger.LogError(NoTokenEventId, "Token is not available for '{Endpoint}'", endpoint?.DisplayName);
             context.Fail(new AuthorizationFailureReason(this, $"Token is not available for '{endpoint}"));
@@ -66,7 +70,7 @@ internal class UnggoyCombinedAuthorizationHandler(
         }
     }
 
-    private bool ExtractUnggoyTokenFromRequest(IHeaderDictionary headers, out string token)
+    private bool ExtractUnggoyToken(IHeaderDictionary headers, out string token)
     {
         foreach (var header in headers.Authorization)
         {
