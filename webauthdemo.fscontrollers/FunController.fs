@@ -5,6 +5,7 @@ open Microsoft.AspNetCore.Mvc
 open webauthdemo.unggoy
 
 [<Route "api/fun">]
+[<UnggoyAuthorize>]
 type FunController() =
     inherit Controller()
     
@@ -19,6 +20,6 @@ type FunController() =
     member this.AnswerAsync cancellation = answer 50 42 cancellation
     
     [<HttpGet "BetterAnswer">]
-    [<UnggoyAction>]
+    [<UnggoyAction "BetterAnswer">] // The name is derived from the HTTP endpoint set by ASP.NET, and is 'BetterAnswer' in this case.
     member this.BetterAnswerAsync cancellation = answer 150 1 cancellation
     

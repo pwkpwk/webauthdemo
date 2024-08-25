@@ -8,4 +8,4 @@ namespace webauthdemo.unggoy;
 /// <remarks>
 /// ASP.NET is smart enough to understand attribute base classes.
 /// </remarks>
-public sealed class UnggoyAuthorizeAttribute() : AuthorizeAttribute("Unggoy");
+public sealed class UnggoyAuthorizeAttribute() : AuthorizeAttribute(UnggoyExtensions.PolicyName);

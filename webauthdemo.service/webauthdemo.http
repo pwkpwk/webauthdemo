@@ -6,3 +6,26 @@ GET http://localhost:5042/api/GetRandomNumberAsync
 GET http://localhost:5042/api/GetRandomNumberAsync
 Authorization: unggoy unggoy-token
 ###
+
+# @name Unauthorized Answer
+GET http://localhost:5042/api/fun/Answer
+###
+
+# @name Invalid token Answer
+GET http://localhost:5042/api/fun/Answer
+Authorization: unggoy sangheli-token
+###
+
+# @name Authorized Answer
+GET http://localhost:5042/api/fun/Answer
+Authorization: unggoy unggoy-token
+###
+
+# @name Unauthorized BetterAnswer
+GET http://localhost:5042/api/fun/BetterAnswer
+###
+
+# @name Authorized BetterAnswer
+GET http://localhost:5042/api/fun/BetterAnswer
+Authorization: unggoy unggoy-token
+###

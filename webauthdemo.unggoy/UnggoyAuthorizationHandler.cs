@@ -4,11 +4,17 @@ using Microsoft.Extensions.Logging;
 
 namespace webauthdemo.unggoy;
 
-internal sealed class UnggoyAuthorizationHandler(ILogger<UnggoyAuthorizationHandler> logger)
+/// <summary>
+/// Handler that verifies the requiremets of the 'Unggoy' authorization policy
+/// </summary>
+internal sealed class UnggoyAuthorizationHandler(
+    ILogger<UnggoyAuthorizationHandler> logger,
+    IUnggoyActionVerifier actionVerifier)
     : IAuthorizationHandler
 {
     private static readonly EventId FailureEventId = new(1, "Failure");
     private static readonly EventId VerifyiingEventId = new(2, "Verifying");
+    private static readonly EventId BadArgsEventId = new(3, "BadArgs");
 
     async Task IAuthorizationHandler.HandleAsync(AuthorizationHandlerContext context)
     {
@@ -89,10 +95,10 @@ internal sealed class UnggoyAuthorizationHandler(ILogger<UnggoyAuthorizationHand
         
         if (actionName is null || token is null) 
         {
+            logger.LogError(BadArgsEventId, "Action name or Unggoy token is missing");
             return false;
         }
         
-        await Task.Delay(75, cancellation);
-        return true;
+        return await actionVerifier.VerifyTokenAsync(actionName, token, cancellation);
     }
 }

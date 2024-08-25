@@ -5,7 +5,7 @@ namespace webauthdemo.service.Authorization;
 public class BackupAuthorizationHandler(ILogger<BackupAuthorizationHandler> logger)
     : IAuthorizationHandler
 {
-    private static readonly EventId HandleEventId = new EventId(1, "Handle");
+    private static readonly EventId HandleEventId = new(1, "Handle");
 
     Task IAuthorizationHandler.HandleAsync(AuthorizationHandlerContext context)
     {

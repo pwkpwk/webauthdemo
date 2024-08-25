@@ -6,7 +6,7 @@ namespace webauthdemo.service.Authorization;
 public class MainAuthorizationMiddlewareResultHandler(ILogger<MainAuthorizationMiddlewareResultHandler> logger)
     : IAuthorizationMiddlewareResultHandler
 {
-    private static readonly EventId UnauthorisedEventId = new EventId(1, "Unauthorised");
+    private static readonly EventId UnauthorisedEventId = new(1, "Unauthorised");
     
     Task IAuthorizationMiddlewareResultHandler.HandleAsync(
         RequestDelegate next,

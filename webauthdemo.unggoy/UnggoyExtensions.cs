@@ -5,6 +5,12 @@ namespace webauthdemo.unggoy;
 
 public static class UnggoyExtensions
 {
+    /// <summary>
+    /// Name of the authorization policy shared between <see cref="AuthorizeAttribute.Policy"/> property
+    /// and the call of <see cref="AuthorizationOptions.AddPolicy(string,Microsoft.AspNetCore.Authorization.AuthorizationPolicy)"/>
+    /// </summary>
+    internal const string PolicyName = "Unggoy";
+    
     public static IServiceCollection AddUnggoyAuthorization(this IServiceCollection services) => services
         .AddAuthorization(AddUnggoyAuthorizationOptions)
         .AddSingleton<IAuthorizationHandler, UnggoyAuthorizationHandler>();
@@ -13,7 +19,7 @@ public static class UnggoyExtensions
     {
         // 'Unggoy' authorization policy has UnggoyActionNameRequired and UnggoyTokenRequired requirements
         options.AddPolicy(
-            "Unggoy",
+            PolicyName,
             policy => policy.AddRequirements(
                 new UnggoyActionNameRequired(),
                 new UnggoyTokenRequired(IsRequired: true)));

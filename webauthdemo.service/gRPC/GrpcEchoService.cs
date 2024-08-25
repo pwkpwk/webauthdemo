@@ -6,8 +6,8 @@ namespace webauthdemo.service.gRPC;
 
 public class GrpcEchoService(ILogger<GrpcEchoService> logger) : EchoService.EchoServiceBase
 {
-    private static readonly EventId YellEventId = new EventId(1, "Yell");
-    private static readonly EventId WhisperEventId = new EventId(2, "Whisper");
+    private static readonly EventId YellEventId = new(1, "Yell");
+    private static readonly EventId WhisperEventId = new(2, "Whisper");
     
     [UnggoyAuthorize, UnggoyAction("Yell")]
     public override Task<Utterance> Yell(Utterance request, ServerCallContext context)

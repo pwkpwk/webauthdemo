@@ -7,7 +7,7 @@ namespace webauthdemo.service.gRPC;
 [Authorize("Unggoy")]
 public class GrpcWeatherService(ILogger<GrpcWeatherService> logger) : WeatherService.WeatherServiceBase
 {
-    private static readonly EventId QueryEventId = new EventId(1, "Query");
+    private static readonly EventId QueryEventId = new(1, "Query");
     
     [UnggoyAction("Query")]
     public override Task<WeatherReport> Query(WeatherRequest request, ServerCallContext context)

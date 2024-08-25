@@ -15,6 +15,9 @@ builder.Services.AddGrpcSwagger();
 
 // Add 'Unggoy' authorization policy
 builder.Services.AddUnggoyAuthorization();
+// Also register the required Unggoy action verifier used by the authorization handler
+// registered by AddUnggoyAuthorization
+builder.Services.AddSingleton<IUnggoyActionVerifier, UnggoyActionVerifier>();
 
 builder.Services.AddSingleton<IAuthorizationHandler, BackupAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, MainAuthorizationMiddlewareResultHandler>();
