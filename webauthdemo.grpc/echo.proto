@@ -1,0 +1,10 @@
+syntax="proto3";
+
+message Utterance {
+  string text = 1;
+}
+
+service EchoService {
+  rpc Yell (Utterance) returns (Utterance);
+  rpc Whisper (Utterance) returns (Utterance);
+}

@@ -1,0 +1,13 @@
+syntax="proto3";
+
+message WeatherRequest {
+  string locale = 1;
+}
+
+message WeatherReport {
+  string description = 2;
+}
+
+service WeatherService {
+  rpc Query(WeatherRequest) returns (WeatherReport);
+}

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using webauthdemo.fscontrollers;
 using webauthdemo.service.Authorization;
+using webauthdemo.service.gRPC;
 using webauthdemo.unggoy;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddGrpcSwagger();
 
 builder.Services.AddAuthorization(AddAuthorizationOptions);
 builder.Services.AddSingleton<IAuthorizationHandler, UnggoyAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, BackupAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, MainAuthorizationMiddlewareResultHandler>();
+builder.Services.AddGrpc();
 
 var mvcConfig = builder.Services.AddControllers();
 mvcConfig.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(FunController).Assembly));
@@ -35,6 +38,8 @@ app.UseRouting();
 // yo inject authorization middleware in the right order
 app.UseAuthorization();
 
+app.MapGrpcService<GrpcWeatherService>();
+app.MapGrpcService<GrpcEchoService>();
 // Discover controllers in all parts added above and map all routes to endpoints
 app.MapControllers();
 
