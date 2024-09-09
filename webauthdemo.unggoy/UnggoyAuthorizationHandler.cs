@@ -25,7 +25,7 @@ internal sealed class UnggoyAuthorizationHandler(
     : IAuthorizationHandler
 {
     private static readonly EventId FailureEventId = new(1, "Failure");
-    private static readonly EventId VerifyiingEventId = new(2, "Verifying");
+    private static readonly EventId VerifyingEventId = new(2, "Verifying");
     private static readonly EventId BadArgsEventId = new(3, "BadArgs");
 
     async Task IAuthorizationHandler.HandleAsync(AuthorizationHandlerContext context)
@@ -36,20 +36,11 @@ internal sealed class UnggoyAuthorizationHandler(
         }
 
         var httpContext = context.Resource as HttpContext;
-
-        if (httpContext is null)
-        {
-            logger.LogError(FailureEventId, "HTTP context is not available");
-            context.Fail();
-            return;
-        }
-
-        var endpoint = httpContext.GetEndpoint();
+        var endpoint = httpContext?.GetEndpoint();
 
         if (endpoint is null)
         {
             logger.LogError(FailureEventId, "HTTP endpoint is not available");
-            context.Fail();
             return;
         }
 
@@ -65,8 +56,7 @@ internal sealed class UnggoyAuthorizationHandler(
                 if (token is null)
                 {
                     logger.LogError(FailureEventId, "Required Unggoy token is missing");
-                    context.Fail(new AuthorizationFailureReason(this, "Required Unggoy token is missing"));
-                    break;
+                    return;
                 }
 
                 context.Succeed(requirement);
@@ -78,29 +68,25 @@ internal sealed class UnggoyAuthorizationHandler(
                 if (actionName is null)
                 {
                     logger.LogError(FailureEventId, "Action name is not available");
-                    context.Fail(new AuthorizationFailureReason(this, "Action name is not available"));
-                    break;
+                    return;
                 }
 
                 context.Succeed(requirement);
             }
         }
 
-        if (!context.HasFailed)
-        {
-            var valid = await VerifyTokenAsync(actionName, token, httpContext.RequestAborted);
+        var valid = await VerifyTokenAsync(actionName, token, httpContext.RequestAborted);
 
-            if (!valid)
-            {
-                logger.LogError(FailureEventId, "Token validation has failed");
-                context.Fail(new AuthorizationFailureReason(this, "Token validation has failed"));
-            }
+        if (!valid)
+        {
+            logger.LogError(FailureEventId, "Token validation has failed");
+            context.Fail(new AuthorizationFailureReason(this, "Token validation has failed"));
         }
     }
 
     private async Task<bool> VerifyTokenAsync(string? actionName, string? token, CancellationToken cancellation)
     {
-        logger.LogInformation(VerifyiingEventId, "Verifying token '{Token}' for '{Action}'", token, actionName);
+        logger.LogInformation(VerifyingEventId, "Verifying token '{Token}' for '{Action}'", token, actionName);
 
         if (actionName is null || token is null)
         {
