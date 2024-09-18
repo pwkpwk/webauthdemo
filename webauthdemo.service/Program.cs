@@ -2,10 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using webauthdemo.fscontrollers;
 using webauthdemo.service.Authorization;
+using webauthdemo.service.Background;
 using webauthdemo.service.gRPC;
 using webauthdemo.unggoy;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHostedService<PeriodicService>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
