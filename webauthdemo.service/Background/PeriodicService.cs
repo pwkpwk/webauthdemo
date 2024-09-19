@@ -23,9 +23,9 @@ internal class PeriodicService(ILogger<PeriodicService> logger) : IHostedLifecyc
     {
         logger.LogInformation(StartEventId, "Start");
         _timer = new PeriodicTimer(
-            TimeSpan.FromMilliseconds(Random.Shared.Next(2000, 3000)),
+            TimeSpan.FromMilliseconds(Random.Shared.Next(20000, 30000)),
             TimeProvider.System);
-        _task = Task.Run(TimerLoop, _cts.Token);
+        _task = TimerLoop(_cts.Token);
         return Task.CompletedTask;
     }
 
@@ -70,11 +70,11 @@ internal class PeriodicService(ILogger<PeriodicService> logger) : IHostedLifecyc
         await Task.Delay(Random.Shared.Next(50, 100), cancellation);
     }
 
-    private async Task TimerLoop()
+    private async Task TimerLoop(CancellationToken cancellation)
     {
         try
         {
-            while (await _timer.WaitForNextTickAsync(_cts.Token))
+            while (await _timer.WaitForNextTickAsync(cancellation))
             {
                 ExceptionDispatchInfo edi = null;
                 logger.LogInformation(TimerEnterEventId, "Timer enter");
