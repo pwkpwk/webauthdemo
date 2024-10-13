@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="webauthdemo.fscontrollers\webauthdemo.fscontrollers.fsproj" Type="Classic F#" />
+  <Project Path="webauthdemo.grpc\webauthdemo.grpc.csproj" Type="Classic C#" />
+  <Project Path="webauthdemo.service\webauthdemo.service.csproj" Type="Classic C#" />
+  <Project Path="webauthdemo.test.component\webauthdemo.test.component.csproj" Type="Classic C#" />
+  <Project Path="webauthdemo.unggoy\webauthdemo.unggoy.csproj" Type="Classic C#" />
+</Solution>
